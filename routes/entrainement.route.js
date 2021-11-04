@@ -7,7 +7,7 @@ const isAuthenticate = require('../middlewares/authenticateJWT');
 
 router.post('/create', [isAuthenticate,isEntraineur], entrainementController.create);
 router.get('/' , entrainementController.allEntrainement);
-router.get('/')
+
 
 
 

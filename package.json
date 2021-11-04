@@ -4,15 +4,18 @@
   "description": "web app for manage session training with or without coach",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "nodemon app.js"
   },
   "author": "fabrizio villani",
   "license": "ISC",
   "devDependencies": {
+    "chai": "^4.3.4",
     "chalk": "^4.1.2",
     "dotenv": "^10.0.0",
-    "nodemon": "^2.0.13"
+    "mocha": "^9.1.3",
+    "nodemon": "^2.0.13",
+    "supertest": "^6.1.6"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",

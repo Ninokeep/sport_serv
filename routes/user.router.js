@@ -49,7 +49,17 @@ check('objectif').trim().notEmpty().toLowerCase().withMessage('le champ objectif
 
 
 
-router.get('/:id', userController.getUser)
+
+// entrainement
+router.post('/suivre/entrainement', userController.suivreEntrainement);
+router.post('/quitter/entrainement', userController.quitterEntrainement);
+
+
+
+
+
+
+router.get('/:id', [authenticateToken], userController.getUser)
 
 
 

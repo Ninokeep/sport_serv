@@ -44,7 +44,28 @@ const Sportif = sequelize.define('Sportif', {
         type: DataTypes.STRING,
         allowNull: false,
         defaultValue: 'sportif'
-    } 
+    },
+    age : {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+        
+    },
+    niveau : {
+        type : DataTypes.STRING,
+        allowNull: true,
+        defaultValue: 'débutant'
+    },
+    activity_total : {
+        type : DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue : 0
+    },
+    km_total : {
+            type : DataTypes.INTEGER,
+            allowNull: true,
+            defaultValue: 0
+    }
   
 },
 {

@@ -56,8 +56,6 @@ app.listen(process.env.PORT, async () =>{
         }});
         Entrainement.belongsToMany(Sportif, {through: SportifEntrainement, onDelete:'CASCADE', onUpdate:'CASCADE' , foreignKey: {name:'entrainement_id'}});
 
-  
-
         await sequelize.authenticate();
         
         // await Sportif.sync({alter:true})
@@ -86,6 +84,9 @@ app.listen(process.env.PORT, async () =>{
 //           })
            
 //     })
+
+
+module.exports = app;
 
 
 
