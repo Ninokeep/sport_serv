@@ -18,7 +18,9 @@ exports.allEntrainement= async(req,res)=>{
 
     //afficher tous les entraînements disponibles
 
-    const requestEntrainement = await Entrainement.findAll();
+    const requestEntrainement = await Entrainement.findAll({
+        attributes: ['id','nom','commentaire','objectif','rating','niveau']
+    });
     res.status(200).json({"success":true, "response": requestEntrainement})
     
 }

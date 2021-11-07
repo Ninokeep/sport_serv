@@ -206,11 +206,16 @@ exports.getEntrainementByUser = (req,res)=>{
     if(typeof sportif_id === 'string' || sportif_id instanceof String ){
         res.status(400).json({"success":false,"response":"string interdit !!!"})
     }
-    Sportif.findOne({where: {id: sportif_id}, include: [
-        Entrainement,
-        
-        ],
-    attributes: []}
+    Sportif.findOne({where: {id: sportif_id}, include:{
+        model: Entrainement,
+        attributes: {
+            exclude : ['createdAt','updatedAt']
+        },
+        through:{
+            attributes: []
+        }
+    },
+        attributes: []}
         )
         
         .then(
