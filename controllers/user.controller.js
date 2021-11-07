@@ -2,7 +2,7 @@ const Sportif = require('../models/sportif');
 const bcrypt = require('bcrypt');
 const {validationResult } = require('express-validator');
 const token = require('../config/token');
-const { Op, where } = require('sequelize');
+const { Op } = require('sequelize');
 const jwt = require('jsonwebtoken');
 const Entrainement = require('../models/entrainement');
 const SportifEntrainement = require('../models/sportifEntrainement');
@@ -53,12 +53,12 @@ exports.login = async (req,res) =>{
                             await Sportif.update({token: jwt}, {
                                 where: {
                                     email : email
-                                }
+                                },
+                                
                             });
-                            
-                            
-                            
-                            res.status(200).json({"success":true,"response":jwt})  
+                            // j'insère le jwt dans l'objet de ma request sequelize 
+                            sportRequest[0].dataValues.jwt = jwt        
+                            res.status(200).json({"success":true,"response":sportRequest})  
                         }else{
                             res.status(200).json({"success":false, "response": "mauvais mot de passe"}) 
                         }
@@ -151,7 +151,7 @@ exports.suivreEntrainement = async(req,res)=>{
                 userFound.addEntrainement(entrainement_id).then(
                     rep=>{
                         if(rep=== undefined){
-                            res.status(400).json({"success": false, "response" :"entrainement déjà pris"})
+                            res.status(403).json({"success": false, "response" :"entrainement déjà pris"})
                         }
                         res.status(200).json({"success": true, "response" :rep})
                   }            
@@ -201,7 +201,75 @@ exports.quitterEntrainement = async(req,res)=>{
 }
 
 
+exports.getEntrainementByUser = (req,res)=>{
+    const {sportif_id} = req.body;
+    if(typeof sportif_id === 'string' || sportif_id instanceof String ){
+        res.status(400).json({"success":false,"response":"string interdit !!!"})
+    }
+    Sportif.findOne({where: {id: sportif_id}, include: [
+        Entrainement,
+        
+        ],
+    attributes: []}
+        )
+        
+        .then(
+        rep=>{
+            if(!rep){
+                res.status(200).json({"success":false,"response":"id not found"})
+            }
+            res.status(200).json({"success":true,"response":rep})
+        }
+    )
+    .catch(err =>{
+        res.status(400).json({"success":false,"response":err})
 
+    })
+
+}
+
+
+
+exports.getEntrainementFinishedByUser = (req,res)=>{
+
+    const {sportif_id} = req.body;
+
+    if(typeof sportif_id === 'string' || sportif_id instanceof String ){
+        res.status(400).json({"success":false,"response":"string interdit !!!"})
+    }
+    
+
+    Sportif.findAll({
+        where : {
+            id : sportif_id
+        },
+        attributes: [],
+        include: [{
+            model:Entrainement,
+            required: false,
+            through: {
+                where : {
+                    finished: true
+                },
+                
+                attributes: []}
+        }]
+    }).then(
+        data => {
+            
+            if(data.length>0){
+                res.status(200).json({"success":true,"response": data})
+            }
+            res.status(200).json({"success":false,"response": "pas d'entrainement fini"})
+
+
+        }
+    )
+    .catch(err => {
+            console.log(err)
+        })
+
+}
 
 
 

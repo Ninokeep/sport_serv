@@ -50,10 +50,11 @@ check('objectif').trim().notEmpty().toLowerCase().withMessage('le champ objectif
 
 
 
-// entrainement
-router.post('/suivre/entrainement', userController.suivreEntrainement);
-router.post('/quitter/entrainement', userController.quitterEntrainement);
-
+// entrainement pour les utilisateurs à sécuriser les routes
+router.post('/suivre/entrainement',[authenticateToken] ,userController.suivreEntrainement);
+router.post('/quitter/entrainement',[authenticateToken], userController.quitterEntrainement);
+router.post('/entrainement', userController.getEntrainementByUser);
+router.post('/fini/entrainement',userController.getEntrainementFinishedByUser);
 
 
 
