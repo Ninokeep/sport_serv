@@ -3,7 +3,10 @@ const sequelize = require('../config/mysql');
 
 
 
-const Sportif = sequelize.define('Sportif', {
+const User = sequelize.define('user', {
+
+
+
     nom : {
         type: DataTypes.STRING,
         allowNull: false,
@@ -21,15 +24,6 @@ const Sportif = sequelize.define('Sportif', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    sport : {
-        type: DataTypes.STRING,
-        allowNull: false,
-        defaultValue: 'course'
-    },
-    poids : {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
     sexe : {
         // 0 = men and 1 = girl
         type: DataTypes.BOOLEAN,
@@ -41,9 +35,9 @@ const Sportif = sequelize.define('Sportif', {
         defaultValue: null
     },
     rule : {
-        type: DataTypes.STRING,
+        type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: 'sportif'
+        defaultValue: false
     },
     age : {
         type: DataTypes.INTEGER,
@@ -51,31 +45,37 @@ const Sportif = sequelize.define('Sportif', {
         defaultValue: 0
         
     },
-    niveau : {
-        type : DataTypes.STRING,
-        allowNull: true,
-        defaultValue: 'débutant'
+    numero_telephone : {
+      type: DataTypes.INTEGER,
+      allowNull: false
     },
-    activity_total : {
-        type : DataTypes.INTEGER,
-        allowNull: true,
-        defaultValue : 0
+    pathologie : {
+        type: DataTypes.STRING,
+        allowNull: false
     },
-    km_total : {
-            type : DataTypes.INTEGER,
-            allowNull: true,
-            defaultValue: 0
+    seance_restante : {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    defaultValue: 0
+    },
+    id_kine : {
+    type : DataTypes.INTEGER,
+    allowNull: true,
+    defaultValue: null
     }
+    },
+    {
+        engine : 'INNODB',
+        freezeTableName : true,
+        timestamps: false,
+        createdAt: false,
+        updatedAt: false,
+    },
   
-},
-{
-    engine : 'INNODB'
-}
-
 
 
 )
 
 
 
-module.exports = Sportif;
+module.exports = User;

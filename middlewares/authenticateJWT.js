@@ -1,5 +1,5 @@
 const jwt  = require('jsonwebtoken');
-const Sportif = require('../models/sportif');
+const Sportif = require('../models/user');
 
 //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoyLCJpYXQiOjE2MzQ2MzIwNTgsImV4cCI6MTYzNDgwNDg1OH0.g8YqLCV0b8_JCoXIHuxf4Mkse4OtB0gH828AZGsJjKI
 //vérifie si le client a un bon token valide par rapport à mes informations de .env et je regarde dans la db si un token existe

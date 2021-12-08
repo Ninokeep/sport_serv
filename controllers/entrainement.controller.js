@@ -1,16 +1,7 @@
 const Entrainement = require('../models/entrainement');
-const Sportif = require('../models/sportif');
+const Sportif = require('../models/user');
 const SportifEntrainement = require('../models/sportifEntrainement');
 
-
-    // const result = await Sportif.findOne({
-    //     where : {
-    //         email : 'fabrizio@gmail.com'
-    //     },
-    //     include: Entrainement
-    // });
-    
-    //        res.status(200).json({"success":true, "response" : result})
 
 
 
@@ -25,15 +16,6 @@ exports.allEntrainement= async(req,res)=>{
     
 }
 
-//pour créer une jointure en sportif entrainement table
-// try{
-//     const requestSportifEntrainement = await SportifEntrainement.create({sportif_id : 2, entrainement_id : 2})
-//     res.status(200).json({"success":true, "response":requestSportifEntrainement})
-// }
-// catch(e){
-//     res.status(400).json({"success":true, "response":e})
-
-// }
 
 
 exports.create =  async (req,res)=>{

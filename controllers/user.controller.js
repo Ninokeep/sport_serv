@@ -1,4 +1,4 @@
-const Sportif = require('../models/sportif');
+const Sportif = require('../models/user');
 const bcrypt = require('bcrypt');
 const {validationResult } = require('express-validator');
 const token = require('../config/token');
@@ -6,8 +6,10 @@ const { Op } = require('sequelize');
 const jwt = require('jsonwebtoken');
 const Entrainement = require('../models/entrainement');
 const SportifEntrainement = require('../models/sportifEntrainement');
+
+
 exports.register =  async (req,res) => {
-    const {nom,prenom,email,sport,poids,sexe,password,age,niveau} = req.body
+    const {nom,prenom,email,sexe,password,age,numero_telephone,seance_restante,id_kine,pathologie} = req.body
     const errors = validationResult(req);
     if(!errors.isEmpty()){
         res.status(400).json({"success":false, "response": errors}) 
@@ -15,7 +17,7 @@ exports.register =  async (req,res) => {
     else{
        try{
         
-        const sportif = await Sportif.create({nom,prenom,email,sport,poids,sexe,password: bcrypt.hashSync(password,10), age,niveau});
+        // const sportif = await Sportif.create({nom,prenom,email,sexe,password,age,numero_telephone,seance_restante,id_kine,pathologie,password: bcrypt.hashSync(password,10)});
         
         res.status(200).json({"success":true,"response":"user créé"})  
 
@@ -26,6 +28,7 @@ exports.register =  async (req,res) => {
     }
 
 }
+
 exports.login = async (req,res) =>{
 
         const {email,password} = req.body;
@@ -79,6 +82,7 @@ exports.login = async (req,res) =>{
 
 
 }
+
 exports.logout = async(req,res)=>{
     const {email}  = req.body;
     const errors = validationResult(req);

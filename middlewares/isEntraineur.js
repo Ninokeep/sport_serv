@@ -1,4 +1,4 @@
-const Sportif = require('../models/sportif');
+const Sportif = require('../models/user');
 
 function isEntraineur(req,res,next){
 

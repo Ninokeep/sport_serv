@@ -1,23 +1,21 @@
 const express = require('express');
 const app = express();
-const chalk = require('chalk');
 const cors = require('cors');
 const session = require('express-session');
 const userRouter = require('./routes/user.router');
 const entrainementRouter = require('./routes/entrainement.route');
-//database
-// const {MongoClient} = require('mongodb');
-// const mongoose = require('mongoose');
-// const User = require('./models/user');
+const kineRouter = require('./routes/kine.route');
+
+
+
+
 
 //database mysql
 const sequelize = require('./config/mysql');
 
 // Database mysql model's
-const Sportif = require('./models/sportif');
-const Agenda = require('./models/agenda');
+const Sportif = require('./models/user');
 const Entrainement = require('./models/entrainement');
-const Perfomance = require('./models/perfomance');
 const SportifEntrainement = require('./models/sportifEntrainement');
 
 
@@ -25,8 +23,39 @@ const { DataTypes } = require('sequelize');
 //dotenv
 require('dotenv').config();
 
-//router here
+// je délcare yml ici
+// swagger right here 
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require("swagger-jsdoc");
+const swaggerJSDoc = require('swagger-jsdoc');
+// const YAML = require('yamljs');
+// const swaggerDocument = YAML.load('./swagger.yaml');
 
+const options = {
+	definition: {
+		openapi: "3.0.0",
+		info: {
+			title: "Library API",
+			version: "1.0.0",
+			description: "A simple Express Library API",
+		},
+		servers: [
+			{
+				url: "http://localhost:8001",
+			},
+		],
+	},
+	apis: ["./routes/*.js"],
+};
+const specs = swaggerJSDoc(options)
+
+
+//router here
+app.use(
+  '/api-docs',
+  swaggerUi.serve, 
+  swaggerUi.setup(specs)
+);
 
 app.use(cors());
 app.use(express.json()) 
@@ -41,33 +70,20 @@ global.__basedir = __dirname;
 
 app.use('/user', userRouter);
 app.use('/entrainement', entrainementRouter)
+app.use('/kine', kineRouter)
 
-app.listen(process.env.PORT, async () =>{
+
+
+app.listen(8001, async () =>{
 
     try {
-
-       
-        //création des associations
-        
-
-
-        Sportif.belongsToMany(Entrainement,{through : SportifEntrainement, onDelete:'CASCADE', onUpdate:'CASCADE', foreignKey:{
-            name:'sportif_id'
-        }});
-        Entrainement.belongsToMany(Sportif, {through: SportifEntrainement, onDelete:'CASCADE', onUpdate:'CASCADE' , foreignKey: {name:'entrainement_id'}});
-
         await sequelize.authenticate();
-        
         // await Sportif.sync({alter:true})
         // await Agenda.sync({alter:true})
         // await Entrainement.sync({alter:true})
-        
         // await Perfomance.sync({alter:true})
         // await SportifEntrainement.sync({alter:true})
-        
-   
-    
-        console.log(`Example app listening at http://localhost:${process.env.PORT}`)
+        console.log(`Example app listening at http://localhost:8001`)
     }
     catch(error){
         console.error('unable to connect the database', error);
@@ -75,15 +91,7 @@ app.listen(process.env.PORT, async () =>{
     
 })
 
-// mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true})
-//     .then(() =>{
-//         app.use('/user', userRouter);
 
-//         app.listen(process.env.PORT,   () => {
-//             console.log(`Example app listening at http://localhost:${process.env.PORT}`)
-//           })
-           
-//     })
 
 
 module.exports = app;
