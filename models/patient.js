@@ -29,11 +29,7 @@ const User = sequelize.define('user', {
         type: DataTypes.BOOLEAN,
         allowNull: false
     },
-    token : {
-        type: DataTypes.STRING,
-        allowNull: true,
-        defaultValue: null
-    },
+
     rule : {
         type: DataTypes.BOOLEAN,
         allowNull: false,

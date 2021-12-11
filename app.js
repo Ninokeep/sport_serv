@@ -2,8 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const session = require('express-session');
-const userRouter = require('./routes/user.router');
-const entrainementRouter = require('./routes/entrainement.route');
+const patientRouter = require('./routes/patient.route');
 const kineRouter = require('./routes/kine.route');
 
 
@@ -14,9 +13,8 @@ const kineRouter = require('./routes/kine.route');
 const sequelize = require('./config/mysql');
 
 // Database mysql model's
-const Sportif = require('./models/user');
-const Entrainement = require('./models/entrainement');
-const SportifEntrainement = require('./models/sportifEntrainement');
+const Kine = require('./models/kine');
+
 
 
 const { DataTypes } = require('sequelize');
@@ -68,8 +66,6 @@ cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }}));
 global.__basedir = __dirname;
 
 
-app.use('/user', userRouter);
-app.use('/entrainement', entrainementRouter)
 app.use('/kine', kineRouter)
 
 
@@ -78,6 +74,7 @@ app.listen(8001, async () =>{
 
     try {
         await sequelize.authenticate();
+        // await Kine.sync({alter:true})
         // await Sportif.sync({alter:true})
         // await Agenda.sync({alter:true})
         // await Entrainement.sync({alter:true})
