@@ -70,24 +70,27 @@ app.use('/kine', kineRouter)
 
 
 
-app.listen(8001, async () =>{
+if(!module.parent){
 
-    try {
-        await sequelize.authenticate();
-        // await Kine.sync({alter:true})
-        // await Sportif.sync({alter:true})
-        // await Agenda.sync({alter:true})
-        // await Entrainement.sync({alter:true})
-        // await Perfomance.sync({alter:true})
-        // await SportifEntrainement.sync({alter:true})
-        console.log(`Example app listening at http://localhost:8001`)
-    }
-    catch(error){
-        console.error('unable to connect the database', error);
-    }
+    app.listen(8001, async () =>{
+
+        try {
+            await sequelize.authenticate();
+            // await Kine.sync({alter:true})
+            // await Sportif.sync({alter:true})
+            // await Agenda.sync({alter:true})
+            // await Entrainement.sync({alter:true})
+            // await Perfomance.sync({alter:true})
+            // await SportifEntrainement.sync({alter:true})
+            console.log(`Example app listening at http://localhost:8001`)
+        }
+        catch(error){
+            console.error('unable to connect the database', error);
+        }
+        
+    })
     
-})
-
+}
 
 
 

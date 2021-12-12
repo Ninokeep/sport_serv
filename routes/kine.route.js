@@ -14,8 +14,7 @@ check('sexe').trim().isBoolean().notEmpty().withMessage('le sexe peut pas être 
 check('pathologie').trim().not().isNumeric().notEmpty().withMessage("la pathologie ne peut pas être vide"),
 check("numero_telephone").trim().isString().notEmpty().withMessage("le numéro de téléphone ne peut pas être vide"),
 check("seance_restante").trim().isNumeric().notEmpty().withMessage("le nombre de séance ne peut pas être vide"),
-check("id_kine").trim().isNumeric().notEmpty().withMessage("l'id du kiné de séance ne peut pas être vide"),
-kineController.register);
+kineController.registerPatient);
 
 router.post('/register',
 check('password').trim().notEmpty().isLength({min:8}).withMessage('petit mot de passe'),
@@ -25,7 +24,7 @@ check('email').trim().notEmpty().toLowerCase().isEmail().withMessage('mauvais fo
 kineController.register);
 
 
-
+router.post('/update', authenticateToken,kineController.updatePatient)
 
 
 router.post('/logout',check('email').trim().notEmpty().isEmail().withMessage('mauvais format d email')
@@ -35,7 +34,7 @@ router.post('/login',check('password').trim().notEmpty().isLength({min:8}).withM
 check('email').trim().notEmpty().isEmail().toLowerCase().withMessage('mauvais format d email'), kineController.login)
 
 
-
+router.get('/token', authenticateToken, kineController.testToken);
 
 
 module.exports = router;

@@ -23,7 +23,7 @@ exports.register =   (req,res) => {
                 if(rep === null){
                     Kine.create({nom,prenom,email,password: bcrypt.hashSync(password,10)}).then(
                         rep => {
-                            res.status(200).json({"success":true,"response": rep})
+                            res.status(201).json({"success":true,"response": rep})
                         },
                         err =>{
                             res.status(400).json({"success":false,"response": "email déjà prise"})
@@ -119,7 +119,7 @@ exports.logout = async(req,res)=>{
         const token = authHeader && authHeader.split(' ')[1]
         
         
-        // select EMAIL from SPORTIF where EMAIL = EMAIL and token = token 
+        // select EMAIL from KINE where EMAIL = EMAIL and token = token 
 
         const kineRequest = await Kine.update({token: null}, {
             where : {
@@ -139,9 +139,94 @@ exports.logout = async(req,res)=>{
     }
 }
 
+exports.registerPatient = async (req,res) => {
+
+    //je vais capturer l'id du kiné grâce au token ! 
+
+    // mon token decodé est { user : 1, expit : ... , expot : ...} donc je fais user.user pour avoir l'id
+
+        const id_kine = req.user;
+
+  
+
+
+    const {nom,prenom,sexe,email,password,numero_telephone, age,pathologie, seance_restante} = req.body
+    const obj_request = {
+        nom,
+        prenom,
+        sexe,
+        email,
+        password : bcrypt.hashSync(password,10),
+        numero_telephone,
+        age,
+        pathologie,
+        seance_restante,
+        id_kine
+    }
+    
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        res.status(400).json({"success":false, "response": errors}) 
+    }
+    
+    // je regarde si l'id du kiné existe
+    const request_id_kine = await Kine.findOne({where:{
+        id : id_kine
+    }})
+    
+    if(request_id_kine === null){
+        res.status(400).json({"success":false, "response": "id kiné pas bon"})
+    }
+    try{
+        const request_create_kine = await Patient.create(obj_request);
+        res.status(201).json({"success":true, "response": request_create_kine})
+    }catch(e){
+        res.status(400).json({"success":true, "response": "user déjà existant"})
+
+    }
+}
 
 
 
+/**
+ * 
+    1) récupérer l'id du kiné dans le token
+    2) récupérer le patient
+    3) mettre à jour les données du patient
+ */
+exports.updatePatient = async (req,res) => {
+    const id_kine = req.user;
+    const {id_patient} = req.body;
+    const {nom,prenom,sexe,email,password,numero_telephone, age,pathologie, seance_restante} = req.body
 
+    //je récupère l'objet patient que je veux modifier.
+    const  request_patient = await Patient.findOne({where:
+    {
+        id : id_patient,
+        id_kine : id_kine
+    }});
+
+    if(request_patient === null){
+        //je n'ai pas de patient 
+        res.status(404).json({"success":false, "response": "pas trouvé"})
+    }
+    //ici j'ai trouvé mon patient
+    
+    res.status(201).json({"success":true, "response":request_patient})
+
+}
+
+
+exports.testToken = (req,res) => {
+    if(req.user === 1){
+        console.log("welcome jojos")
+        console.log(req.user)
+    }
+    else{
+        console.log("bonjour inconnu")
+        console.log(req.user)
+    }
+    res.status(200).json({"coucou":"test"})
+}
 
 

@@ -1,5 +1,5 @@
 const jwt  = require('jsonwebtoken');
-const Patient = require('../models/patient');
+const Kine = require('../models/kine');
 
 //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoyLCJpYXQiOjE2MzQ2MzIwNTgsImV4cCI6MTYzNDgwNDg1OH0.g8YqLCV0b8_JCoXIHuxf4Mkse4OtB0gH828AZGsJjKI
 //vérifie si le client a un bon token valide par rapport à mes informations de .env et je regarde dans la db si un token existe
@@ -15,7 +15,7 @@ function authenticateToken(req, res, next) {
       }
       
       else{
-        Sportif.findOne({where: {
+        Kine.findOne({where: {
           token : token
         }}).then( rep => {
           if(rep == null){
@@ -24,7 +24,9 @@ function authenticateToken(req, res, next) {
 
           }
           //création de session
-          req.session.userId = user.user;
+          
+          req.user = user.user;
+          
          
           next();
         },
