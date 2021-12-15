@@ -2,7 +2,7 @@ const Kine = require('../models/kine');
 const bcrypt = require('bcrypt');
 const {validationResult } = require('express-validator');
 const token = require('../config/token');
-const { Op } = require('sequelize');
+const { Op, where } = require('sequelize');
 const jwt = require('jsonwebtoken');
 const Patient  = require('../models/patient');
 
@@ -197,24 +197,36 @@ exports.registerPatient = async (req,res) => {
 exports.updatePatient = async (req,res) => {
     const id_kine = req.user;
     const {id_patient} = req.body;
-    const {nom,prenom,sexe,email,password,numero_telephone, age,pathologie, seance_restante} = req.body
+
+
+    const {...rest_request } = req.body
+    // je récupère les erreurs de express-validator
+    const errors = validationResult(req);
+
+    if(!errors.isEmpty()){
+        res.status(400).json({"success":false, "response": errors}) 
+    }
 
     //je récupère l'objet patient que je veux modifier.
-    const  request_patient = await Patient.findOne({where:
+    // update renvoit 0 si aucun changement et 1 s'il la requête passe
+    const  request_patient = await Patient.update(
+         {...rest_request},
+        {where:
     {
         id : id_patient,
         id_kine : id_kine
     }});
-
-    if(request_patient === null){
-        //je n'ai pas de patient 
-        res.status(404).json({"success":false, "response": "pas trouvé"})
-    }
-    //ici j'ai trouvé mon patient
     
-    res.status(201).json({"success":true, "response":request_patient})
+
+    if(request_patient.includes(0)){
+        res.status(201).json({"success":true, "response":"aucun changement"})
+    }
+    res.status(201).json({"success":true, "response":"mise  à jour ok"})
+
+  
 
 }
+
 
 
 exports.testToken = (req,res) => {

@@ -24,35 +24,36 @@ require('dotenv').config();
 // je délcare yml ici
 // swagger right here 
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require("swagger-jsdoc");
+// const swaggerDocument = require("swagger-jsdoc");
 const swaggerJSDoc = require('swagger-jsdoc');
-// const YAML = require('yamljs');
-// const swaggerDocument = YAML.load('./swagger.yaml');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./swagger.yaml');
 
+// const options = {
+// 	definition: {
+// 		openapi: "3.0.0",
+// 		info: {
+// 			title: "TFE API DOCUMENTATION",
+// 			version: "1.0.0",
+// 			description: "Api in express",
+// 		},
+// 		servers: [
+// 			{
+// 				url: "http://localhost:8001",
+// 			},
+// 		],
+// 	},
+// 	// apis: ["./routes/*.js"],
+// };
+// const specs = swaggerJSDoc(options)
 const options = {
-	definition: {
-		openapi: "3.0.0",
-		info: {
-			title: "Library API",
-			version: "1.0.0",
-			description: "A simple Express Library API",
-		},
-		servers: [
-			{
-				url: "http://localhost:8001",
-			},
-		],
-	},
-	apis: ["./routes/*.js"],
-};
-const specs = swaggerJSDoc(options)
-
+    explorer : true
+}
 
 //router here
 app.use(
   '/api-docs',
-  swaggerUi.serve, 
-  swaggerUi.setup(specs)
+  swaggerUi.serve, swaggerUi.setup(swaggerDocument, options)
 );
 
 app.use(cors());
