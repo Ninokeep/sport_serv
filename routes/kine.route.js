@@ -56,4 +56,13 @@ check('email').trim().notEmpty().isEmail().toLowerCase().withMessage('mauvais fo
 router.get('/token', authenticateToken, kineController.testToken);
 
 
+
+
+// DELETE PATIENT
+router.delete('/delete-patient',body('email_patient').trim().notEmpty().isEmail().withMessage('le champ ne correspond pas à une adresse émail'), authenticateToken , kineController.deletePatient);
+
+//all patient
+
+router.get('/get-patient', authenticateToken, kineController.allPatient)
+
 module.exports = router;

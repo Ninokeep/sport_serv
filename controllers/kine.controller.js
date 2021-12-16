@@ -228,6 +228,50 @@ exports.updatePatient = async (req,res) => {
 }
 
 
+//delete du patient
+exports.deletePatient = async (req,res) => {
+    const id_kine = req.user;
+    const {email_patient} = req.body;
+    const errors = validationResult(req);
+
+    //j'attrape l'erreur.
+    if(!errors.isEmpty()){
+        res.status(400).json({"success":false, "response": errors}) 
+    }
+
+    const request_patient = await Patient.findOne({where: {
+        // chercher son émail au patient
+        email : email_patient,
+        // je regarde si l'id du kiné est le même que celui dans la table
+        id_kine : id_kine
+    }});
+
+    if(request_patient === null){
+    res.status(404).json({"success":false, "response": "utilisateur pas trouvé"})         
+    }
+    // je delete ici mon patient
+
+    await request_patient.destroy()
+    res.status(200).json({"success":true, "response": "utilisateur bien supprimé"}) 
+
+
+
+}
+
+exports.allPatient = async(req,res) => {
+    const id_kine = req.user;
+
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        res.status(400).json({"success":false, "response": errors}) 
+    }
+
+    const request_all_patient = await Patient.findAll({where:{
+        id_kine: id_kine
+    }});
+    res.status(200).json({"success":false, "response": request_all_patient}) 
+
+}
 
 exports.testToken = (req,res) => {
     if(req.user === 1){

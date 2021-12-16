@@ -33,9 +33,84 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorValidation'
-                
-                
 
+  /kine/update-patient:
+    put:
+      tags:
+        - "Kine"
+      summary: Retourne  un tableau  de [0 ou 1].
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Patient'
+      responses:
+        '200':    # status code
+          description: La réponse de retour sera un tableau avec la valeur 1 
+          content:
+            application/json: 
+              schema: 
+                $ref: '#/components/schemas/SuccessUpdate'
+        '404': 
+          description:  Un tableau qui contient un 0
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorValidation'                
+
+  /kine/delete-patient:
+    delete:
+      tags:
+        - "Kine"
+      summary: Retourne null ou un objet Patient
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Patient'
+      responses:
+        '200':    # status code
+          description: la réponse de retout sera null s'il n'a pas trouvé le patient sinon il renvoie un objet de type Patient s'il a trouvé et supprimé le patient.
+          content:
+            application/json: 
+              schema: 
+                $ref: '#/components/schemas/SuccessDelete'
+        '404': 
+          description:  la réponse est null car il n'a pas trouvé le patient.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorValidation'                
+                  
+  /kine/get-patient:
+   get:
+      tags:
+        - "Kine"
+      summary: Retourne un objet Patient.
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Patient'
+      responses:
+        '200':    # status code
+          description: un objet  avec un ou plusieurs Patient
+          content:
+            application/json: 
+              schema: 
+                $ref: '#/components/schemas/Patient'
+        '404': 
+          description: si un champ est vide ou ne correspond pas au type attendu
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorValidation'
 components:
   schemas:
     Patient:
@@ -132,7 +207,31 @@ components:
               type: string
             seance_restante : 
               type: number
-          
+    SuccessUpdate:
+      type: object
+
+      properties:
+        success:
+          type: boolean
+        responses:
+          type: array
+          items:
+            type: boolean
+            description: >
+              Réponse possible:
+                * `0` - False, Pas de changement ou erreur lors de l'update
+                * `1` - True, Le changement a bien été appliqué     
+    SuccessDelete:
+      type: object
+
+      properties:
+        success:
+          type: boolean
+        responses:
+          type: object
+          $ref: '#/components/schemas/Patient'
+              
+  
   securitySchemes:
     bearerAuth:
       type: http
