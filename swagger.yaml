@@ -91,28 +91,87 @@ paths:
       tags:
         - "Kine"
       summary: Retourne un objet Patient.
-      requestBody:
-        description: Optional description in *Markdown*
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Patient'
       responses:
         '200':    # status code
-          description: un objet  avec un ou plusieurs Patient
+          description: un tableau  avec un ou plusieurs Patient
           content:
             application/json: 
               schema: 
-                $ref: '#/components/schemas/Patient'
-        '404': 
-          description: si un champ est vide ou ne correspond pas au type attendu
+                oneOf:
+                  - $ref: '#/components/schemas/responseSuccess'
+                  - $ref: '#/components/schemas/Patient'
+                example:
+                  success : True
+                  response : [{"id": 47,
+                      "nom": "drake",
+                      "prenom": "grahbam",
+                      "email": "drakee@gmail.com",
+                      "password": "$2b$12$w/d0l0yFSKMMVEgpSDbRlu3q5vHL3oVAEmX7g11AFi2LmVa34o8SO",
+                      "sexe": false,
+                      "rule": false,
+                      "age": 27,
+                      "numero_telephone": "0494425180",
+                      "pathologie": "tendinite jambe droite",
+                      "seance_restante": 15,
+                      "id_kine": 5}]
+                  
+        '401': 
+          $ref: '#/components/responses/UnauthorizedErrors'
+
+  /kine/create-entrainement:
+    post:
+      tags:
+        - Entrainement
+      responses:
+        '200':
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorValidation'
+                oneOf:
+                  - $ref: '#/components/schemas/responseSuccess'
+                  - $ref: '#/components/schemas/Entrainement'
+              example:
+                  success : True
+                  response : {
+                      "id": 47,
+                      "nom": "drake",
+                      "niveau": "debutant",
+                      "commentaire":"entrainement difficile",
+                      "gif":null,
+                      "id_kine": 5}
+        '400':
+          description: mauvaise requête l'id doit être un nombre et supérieur à 0
+        '401':
+          description: Aucun accès  à cette ressource
+        '404':
+          description: l'id du kiné n'a pas été trouvé
+        '500':
+          description: Erreur venant du serveur
 components:
   schemas:
+    Entrainement:
+      type: object
+      properties:
+        id: 
+          type: integer
+          format: int64
+        nom:
+          type: string
+        niveau:
+          type: string
+        gif:
+          type: string
+        commentaire:
+          type: string
+        id_kine:
+          type: integer
+      required:
+        - id
+        - nom
+        - niveau
+        - commentaire
+        - id_kine
     Patient:
       type: object
       properties:
@@ -230,7 +289,14 @@ components:
         responses:
           type: object
           $ref: '#/components/schemas/Patient'
-              
+    responseSuccess:
+      type: object
+      properties:
+        success:
+          type: boolean
+  responses:
+    UnauthorizedErrors:
+      description: L'accés au token est manquant ou invalide        
   
   securitySchemes:
     bearerAuth:

@@ -3,13 +3,8 @@ const router = express.Router();
 const kineController = require('../controllers/kine.controller');
 const {check, body} = require('express-validator');
 const authenticateToken = require('../middlewares/authenticateJWT');
-/**
- * @swagger
- * /users:
- *   get:
- *     summary: Retrieve a list of JSONPlaceholder users
- *     description: Retrieve a list of users from JSONPlaceholder. Can be used to populate a list of fake users when prototyping or testing an API.
-*/
+
+// CREATE PATINET
 router.post('/create-patient',
 check('password').trim().notEmpty().isLength({min:8}).withMessage('petit mot de passe'),
 check('nom').trim().not().isNumeric().notEmpty().toLowerCase().withMessage('le nom peut pas être vide'),
@@ -23,6 +18,7 @@ check("seance_restante").trim().isNumeric().notEmpty().withMessage("le nombre de
 authenticateToken,
 kineController.registerPatient);
 
+// REGISTER PATIENT
 router.post('/register',
 check('password').trim().notEmpty().isLength({min:8}).withMessage('petit mot de passe'),
 check('nom').trim().not().isNumeric().notEmpty().toLowerCase().withMessage('le nom peut pas être vide'),
@@ -31,6 +27,7 @@ check('email').trim().notEmpty().toLowerCase().isEmail().withMessage('mauvais fo
 kineController.register);
 
 
+// UPDATE PATIENT
 router.post('/update-patient',
 body('password').trim().notEmpty().isLength({min:8}).withMessage('petit mot de passe'),
 body('nom').trim().not().isNumeric().notEmpty().toLowerCase().withMessage('le nom peut pas être vide'),
@@ -45,10 +42,11 @@ body('id_patient').trim().isNumeric().notEmpty().withMessage("l'id du patient ne
 
 kineController.updatePatient)
 
-
+// LOGOUT KINE
 router.post('/logout',check('email').trim().notEmpty().isEmail().withMessage('mauvais format d email')
 ,[authenticateToken],kineController.logout)
 
+// CONNECTION KINE
 router.post('/login',check('password').trim().notEmpty().isLength({min:8}).withMessage('petit mot de passe'),
 check('email').trim().notEmpty().isEmail().toLowerCase().withMessage('mauvais format d email'), kineController.login)
 
@@ -62,7 +60,12 @@ router.get('/token', authenticateToken, kineController.testToken);
 router.delete('/delete-patient',body('email_patient').trim().notEmpty().isEmail().withMessage('le champ ne correspond pas à une adresse émail'), authenticateToken , kineController.deletePatient);
 
 //all patient
+router.get('/get-patient', authenticateToken, kineController.allPatient);
 
-router.get('/get-patient', authenticateToken, kineController.allPatient)
+// création entraînement patient
+router.post('/create-entrainement', body('nom').trim().not().isNumeric().notEmpty().toLowerCase().withMessage('le nom peut pas être vide'),
+body('niveau').trim().not().isNumeric().notEmpty().toLowerCase().withMessage('le niveau peut pas être vide'),
+body('commentaire').trim().not().isNumeric().notEmpty().toLowerCase().withMessage('le commentaire peut pas être vide'),
+kineController.createEntrainement);
 
 module.exports = router;

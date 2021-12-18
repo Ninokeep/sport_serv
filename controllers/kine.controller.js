@@ -5,6 +5,7 @@ const token = require('../config/token');
 const { Op, where } = require('sequelize');
 const jwt = require('jsonwebtoken');
 const Patient  = require('../models/patient');
+const Entrainement = require('../models/entrainement');
 
 exports.register =   (req,res) => {
     const {nom,prenom,email,password,} = req.body
@@ -272,6 +273,42 @@ exports.allPatient = async(req,res) => {
     res.status(200).json({"success":false, "response": request_all_patient}) 
 
 }
+
+
+
+// -------------------------------------------------------------
+//                      création d'un entraînement
+
+/**
+ * @param Token - Je récupère l'id du kiné créateur qui se trouve dans le token et qui est stocké dans la session req.user
+ * @param {Object} req - il va contenir le nom, niveau,gif, commentaire 
+ * @param {Object} res - il contient la réponse qui peut être 200 ou 400, 401
+ * @return {Promise} retourne une promesse
+ */
+exports.createEntrainement = (req,res) => {
+    // const id_kine = req.user;
+    const {nom,niveau,gif,commentaire,id_kine} = req.body
+    const errors = validationResult(req);
+    //j'attrape l'erreur.
+    // la variable errors vient de express-validator
+    if(!errors.isEmpty()){
+        res.status(400).json({"success":false, "response": errors}) 
+    }
+    Entrainement.create({nom,niveau,gif,commentaire,id_kine}).then(
+        (rep) =>{
+            console.log(rep)
+        }
+    )
+    .catch(err=>{
+        console.log(err)
+    })
+    res.status(201).json({success:  true  ,response:"entraînement créé !"})
+}
+
+
+
+
+
 
 exports.testToken = (req,res) => {
     if(req.user === 1){
