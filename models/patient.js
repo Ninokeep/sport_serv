@@ -38,12 +38,14 @@ const User = sequelize.define('user', {
     age : {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 0
+        defaultValue: 0,
+      
         
     },
     numero_telephone : {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true,
+      
     },
     pathologie : {
         type: DataTypes.STRING,

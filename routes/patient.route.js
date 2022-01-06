@@ -121,7 +121,7 @@ check('email').trim().notEmpty().toLowerCase().isEmail().withMessage('mauvais fo
 check('age').trim().isNumeric().notEmpty().withMessage("l'age peut pas être vide"),
 check('sexe').trim().isBoolean().notEmpty().withMessage('le sexe peut pas être vide'),
 check('pathologie').trim().not().isNumeric().notEmpty().withMessage("la pathologie ne peut pas être vide"),
-check("numero_telephone").trim().isMobilePhone('fr-BE').notEmpty().withMessage("le numéro de téléphone ne peut pas être vide"),
+// check("numero_telephone").trim().isMobilePhone('fr-BE').notEmpty().withMessage("le numéro de téléphone ne peut pas être vide"),
 check("seance_restante").trim().isNumeric().notEmpty().withMessage("le nombre de séance ne peut pas être vide"),
 check("id_kine").trim().isNumeric().notEmpty().withMessage("l'id du kiné de séance ne peut pas être vide"), patientController.create)
 

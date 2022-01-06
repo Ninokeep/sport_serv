@@ -11,7 +11,7 @@ exports.register =   (req,res) => {
     const {nom,prenom,email,password,} = req.body
     const errors = validationResult(req);
     if(!errors.isEmpty()){
-        res.status(400).json({"success":false, "response": errors}) 
+        res.status(200).json({"success":false, "response": errors}) 
     }
     else{
        try{
@@ -27,21 +27,22 @@ exports.register =   (req,res) => {
                             res.status(201).json({"success":true,"response": rep})
                         },
                         err =>{
-                            res.status(400).json({"success":false,"response": "email déjà prise"})
+                            res.status(200).json({"success":false,"response": "email déjà prise"})
 
                         }
                     )
                     .catch(err => {
-                        console.log("err")
+                        res.status(200).json({"success":false,"response": err})
+
                     })
                 }
                 else{
-                    res.status(400).json({"success":false,"response": "email déjà prise"})
+                    res.status(200).json({"success":false,"response": "email déjà prise"})
                 }
             }
         ).catch(
             err => {
-                res.status(400).json({"success":false, "response": "erreur dans la requête"})
+                res.status(200).json({"success":false, "response": "erreur dans la requête"})
 
             }
         )
@@ -49,7 +50,7 @@ exports.register =   (req,res) => {
 
     }
        catch(e){    
-        res.status(404).json({"success":false,"response":e})  
+        res.status(200).json({"success":false,"response":e})  
        }
     }
 
@@ -199,7 +200,7 @@ exports.updatePatient = async (req,res) => {
     const id_kine = req.user;
     const {id_patient} = req.body;
 
-
+    console.log(id_kine)
     const {...rest_request } = req.body
     // je récupère les erreurs de express-validator
     const errors = validationResult(req);
@@ -210,19 +211,21 @@ exports.updatePatient = async (req,res) => {
 
     //je récupère l'objet patient que je veux modifier.
     // update renvoit 0 si aucun changement et 1 s'il la requête passe
-    const  request_patient = await Patient.update(
-         {...rest_request},
-        {where:
-    {
-        id : id_patient,
-        id_kine : id_kine
-    }});
-    
-
-    if(request_patient.includes(0)){
-        res.status(201).json({"success":true, "response":"aucun changement"})
+    else{
+        const  request_patient = await Patient.update(
+            {...rest_request},
+           {where:
+       {
+           id : id_patient,
+           id_kine : id_kine
+       }});
+       
+   
+       if(request_patient.includes(0)){
+           res.status(201).json({"success":true, "response":"aucun changement"})
+       }
+       res.status(201).json({"success":true, "response":"mise  à jour ok"})
     }
-    res.status(201).json({"success":true, "response":"mise  à jour ok"})
 
   
 
@@ -270,7 +273,7 @@ exports.allPatient = async(req,res) => {
     const request_all_patient = await Patient.findAll({where:{
         id_kine: id_kine
     }});
-    res.status(200).json({"success":false, "response": request_all_patient}) 
+    res.status(200).json({"success":true, "response": request_all_patient}) 
 
 }
 
@@ -307,6 +310,13 @@ exports.createEntrainement = (req,res) => {
 
 
 
+
+exports.getKine   = async (req,res) => {
+    const id_kine = req.user;
+    const response = await Kine.findOne({where:{id:id_kine}})
+    
+    return res.status(200).json({success:true,response:response})
+}
 
 
 
