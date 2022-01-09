@@ -14,8 +14,10 @@ const sequelize = require('./config/mysql');
 
 // Database mysql model's
 const Kine = require('./models/kine');
-
-
+const Patient = require('./models/patient');
+const Session = require('./models/session');
+const SessionMeta = require('./models/session_meta');
+const Entrainement = require('./models/entrainement');
 
 const { DataTypes } = require('sequelize');
 //dotenv
@@ -27,6 +29,7 @@ const swaggerUi = require('swagger-ui-express');
 // const swaggerDocument = require("swagger-jsdoc");
 const swaggerJSDoc = require('swagger-jsdoc');
 const YAML = require('yamljs');
+const User = require('./models/patient');
 const swaggerDocument = YAML.load('./swagger.yaml');
 
 // const options = {
@@ -77,6 +80,7 @@ if(!module.parent){
 
         try {
             await sequelize.authenticate();
+      
             // await Kine.sync({alter:true})
             // await Sportif.sync({alter:true})
             // await Agenda.sync({alter:true})

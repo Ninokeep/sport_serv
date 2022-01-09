@@ -6,6 +6,20 @@ const { Op, where } = require('sequelize');
 const jwt = require('jsonwebtoken');
 const Patient  = require('../models/patient');
 const Entrainement = require('../models/entrainement');
+const Session = require('../models/session');
+const mysql = require('mysql2')
+const connection = mysql.createConnection({
+    host: 'localhost', //change to my_db for container
+    dialect: 'mysql',
+    password:'password',
+    user: 'root',
+    port:'3306',
+   
+    database: 'ia_sport'
+})
+
+
+
 
 exports.register =   (req,res) => {
     const {nom,prenom,email,password,} = req.body
@@ -201,19 +215,19 @@ exports.updatePatient = async (req,res) => {
     const {id_patient} = req.body;
 
     console.log(id_kine)
-    const {...rest_request } = req.body
+    const {password,...rest_request } = req.body
     // je récupère les erreurs de express-validator
     const errors = validationResult(req);
 
     if(!errors.isEmpty()){
-        res.status(400).json({"success":false, "response": errors}) 
+        res.status(200).json({"success":false, "response": errors}) 
     }
 
     //je récupère l'objet patient que je veux modifier.
     // update renvoit 0 si aucun changement et 1 s'il la requête passe
     else{
         const  request_patient = await Patient.update(
-            {...rest_request},
+            {password:bcrypt.hashSync(password,10) ,...rest_request},
            {where:
        {
            id : id_patient,
@@ -288,24 +302,22 @@ exports.allPatient = async(req,res) => {
  * @param {Object} res - il contient la réponse qui peut être 200 ou 400, 401
  * @return {Promise} retourne une promesse
  */
-exports.createEntrainement = (req,res) => {
+exports.createEntrainement = async (req,res) => {
     // const id_kine = req.user;
-    const {nom,niveau,gif,commentaire,id_kine} = req.body
+    const {nom,niveau,gif,commentaire} = req.body
+    const id_kine = req.user;
     const errors = validationResult(req);
     //j'attrape l'erreur.
     // la variable errors vient de express-validator
     if(!errors.isEmpty()){
-        res.status(400).json({"success":false, "response": errors}) 
+        res.status(200).json({"success":false, "response": errors}) 
     }
-    Entrainement.create({nom,niveau,gif,commentaire,id_kine}).then(
-        (rep) =>{
-            console.log(rep)
-        }
-    )
-    .catch(err=>{
-        console.log(err)
-    })
-    res.status(201).json({success:  true  ,response:"entraînement créé !"})
+    else{
+       const response =  await Entrainement.create({nom,niveau,gif,commentaire,id_kine});
+
+       console.log(response);
+        res.status(201).json({success:  true  ,response:"entraînement créé !"})
+    }
 }
 
 
@@ -331,5 +343,39 @@ exports.testToken = (req,res) => {
     }
     res.status(200).json({"coucou":"test"})
 }
+
+
+
+exports.getAllEntrainementByPatient = async (req,res)=> {
+    // const id_kine = req.user;
+    // const {email} = req.body;
+    // if(!errors.isEmpty()){
+    //     res.status(200).json({"success":false, "response": errors}) 
+    // }
+
+    
+    const {id_user} = req.body
+    
+
+     connection.execute(
+        'SELECT * FROM `user`  INNER JOIN `session`  ON user.id = ? AND session.id_user = user.id INNER JOIN `entrainement` ON entrainement.id = session.id_entrainement INNER JOIN `session_meta` ON session_meta.id_session  = session.id  ',
+        [id_user],
+        function(err,results,fields){
+            res.status(200).json({response:results})
+        }
+        // function(err, results, fields) {
+        //     if(results.length > 0){
+        //         res.status(200).json({success:true,response:results})
+        //     }
+        //     else{
+        //         res.status(200).json({success:false,response:err})
+        //     }
+       
+        // }
+      );
+
+  
+    
+   }
 
 

@@ -71,9 +71,10 @@ router.get('/get-patient', authenticateToken, kineController.allPatient);
 // création entraînement patient
 router.post('/create-entrainement', body('nom').trim().not().isNumeric().notEmpty().toLowerCase().withMessage('le nom peut pas être vide'),
 body('niveau').trim().not().isNumeric().notEmpty().toLowerCase().withMessage('le niveau peut pas être vide'),
-body('commentaire').trim().not().isNumeric().notEmpty().toLowerCase().withMessage('le commentaire peut pas être vide'),
+body('commentaire').trim().not().isNumeric().notEmpty().toLowerCase().withMessage('le commentaire peut pas être vide'), authenticateToken,
 kineController.createEntrainement);
 
+router.post('/get-entrainement-user', kineController.getAllEntrainementByPatient)
 
 
 module.exports = router;

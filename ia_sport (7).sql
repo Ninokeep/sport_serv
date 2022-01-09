@@ -1,0 +1,258 @@
+-- phpMyAdmin SQL Dump
+-- version 5.1.1
+-- https://www.phpmyadmin.net/
+--
+-- Hôte : my_db
+-- Généré le : dim. 09 jan. 2022 à 10:03
+-- Version du serveur : 5.7.36
+-- Version de PHP : 7.4.25
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de données : `ia_sport`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `entrainement`
+--
+
+CREATE TABLE `entrainement` (
+  `id` int(11) NOT NULL,
+  `nom` varchar(50) NOT NULL,
+  `niveau` varchar(50) NOT NULL,
+  `gif` blob,
+  `commentaire` varchar(255) DEFAULT NULL,
+  `id_kine` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `entrainement`
+--
+
+INSERT INTO `entrainement` (`id`, `nom`, `niveau`, `gif`, `commentaire`, `id_kine`) VALUES
+(1, 'jambe', 'debutant', NULL, 'descend bien sur ta jambe', 1),
+(5, 'main', 'debutant', NULL, 'un entraînement sympa', 5),
+(6, 'jambe droite', 'debutant', NULL, 'descend bien sur ton genoux', 1),
+(16, 'petit test', 'debutant', NULL, 'ff', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `kine`
+--
+
+CREATE TABLE `kine` (
+  `id` int(11) NOT NULL,
+  `nom` varchar(255) NOT NULL,
+  `prenom` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `token` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `kine`
+--
+
+INSERT INTO `kine` (`id`, `nom`, `prenom`, `email`, `password`, `token`) VALUES
+(1, 'joe', 'demut', 'joe@gmail.com', '$2b$10$PqPDcgm0oLB4n3/5KMKCsOxfzMEAx4zdSa2OGXjVDhPXkF8V9d/Jq', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoxLCJpYXQiOjE2NDE3MjAyNjgsImV4cCI6MTY0MTg5MzA2OH0.u2_zO1GXydZWYseNwJOqlS5nGOVjVAff7whLq6uTmr0'),
+(5, 'fabrizio', 'villani', 'fa@gmail.com', '$2b$10$PqPDcgm0oLB4n3/5KMKCsOxfzMEAx4zdSa2OGXjVDhPXkF8V9d/Jq', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjo1LCJpYXQiOjE2NDExMTk0MTIsImV4cCI6MTY0MTI5MjIxMn0.J8UQGjm6JhozjthJrNH3QtGiqLU3R-PfvjK556G9pE8'),
+(12, 'fabrizio', 'villani', 'jean@gmail.com', '$2b$10$7GYH8TN33hECdKcQCShT7e2K7Lg7.N7bvamuN5JN5R.kwqm0hjCzK', NULL),
+(17, 'fabrizio', 'villani', 'draketrois@gmail.com', '$2b$10$CyLe2E2z3/Q2yhbdArEhhufmLmssJHuL85igwE6sAk.cZyReDHW.u', NULL),
+(18, 'fabrizio', 'villani', 'drake2@gmail.com', '$2b$10$4Hdid03zFjhUteG/wO/3X.8R7ERjh.NKsIq0sbR6.jCpQ4OWdws0C', NULL),
+(21, 'test', 'lol', 'asaprocky@gmail.com', '$2b$10$iwJQ3.zYcZqSd5fcj3sNfuoi3PJz50U/qerjjU8w0Mh.ABFqj0epG', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `session`
+--
+
+CREATE TABLE `session` (
+  `id` int(11) NOT NULL,
+  `id_entrainement` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `fini` tinyint(1) NOT NULL DEFAULT '0',
+  `message_user` varchar(255) DEFAULT NULL,
+  `repetition_fait` int(11) DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `session`
+--
+
+INSERT INTO `session` (`id`, `id_entrainement`, `id_user`, `fini`, `message_user`, `repetition_fait`) VALUES
+(1, 1, 42, 0, NULL, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `session_meta`
+--
+
+CREATE TABLE `session_meta` (
+  `id` int(11) NOT NULL,
+  `meta_name` varchar(255) NOT NULL,
+  `meta_value` int(11) NOT NULL,
+  `id_session` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `session_meta`
+--
+
+INSERT INTO `session_meta` (`id`, `meta_name`, `meta_value`, `id_session`) VALUES
+(1, 'nombre_repetition', 45, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `user`
+--
+
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL,
+  `nom` varchar(50) NOT NULL,
+  `prenom` varchar(50) NOT NULL,
+  `sexe` tinyint(1) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `rule` tinyint(1) NOT NULL DEFAULT '0',
+  `numero_telephone` varchar(50) NOT NULL,
+  `age` int(11) NOT NULL,
+  `pathologie` varchar(255) DEFAULT NULL,
+  `seance_restante` int(11) NOT NULL DEFAULT '0',
+  `id_kine` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `user`
+--
+
+INSERT INTO `user` (`id`, `nom`, `prenom`, `sexe`, `email`, `password`, `rule`, `numero_telephone`, `age`, `pathologie`, `seance_restante`, `id_kine`) VALUES
+(42, 'cavallaro', 'fabrizio', 0, 'fabrizio@gmail.com', '$2b$10$OMP3.aaX2pwNp7EqX46aM.diVx1INCuRNunrkskqWRoUU5zMioDzK', 0, '0494425682', 50, 'tendinite de la main', 15, 1),
+(43, 'drake', 'grahbam', 0, 'drake@gmail.com', '$2b$12$IUNuhw/fvzFbjGgaT7SceuqE9eXQQjjtkvPmRaN7/Yxy2lfuPuvha', 0, '0494425680', 27, 'tendinite jambe droite', 15, 1),
+(47, 'drake', 'grahbam', 0, 'drakee@gmail.com', '$2b$12$w/d0l0yFSKMMVEgpSDbRlu3q5vHL3oVAEmX7g11AFi2LmVa34o8SO', 0, '0494425180', 27, 'tendinite jambe droite', 15, 5),
+(50, 'deep', 'learning', 0, 'joemaniae@gmail.com', '$2b$10$2AO/yMnkqPUu9hB8xIkUUexMfCZOsvG/bX/ZoDarKh8A9qsLWRtq.', 0, '0494427582', 27, 'tendinite main droite', 5, 5);
+
+--
+-- Index pour les tables déchargées
+--
+
+--
+-- Index pour la table `entrainement`
+--
+ALTER TABLE `entrainement`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `session_FK` (`id_kine`);
+
+--
+-- Index pour la table `kine`
+--
+ALTER TABLE `kine`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD KEY `ix_kine_id` (`id`);
+
+--
+-- Index pour la table `session`
+--
+ALTER TABLE `session`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `entrainement_FK` (`id_entrainement`),
+  ADD KEY `user_FK` (`id_user`);
+
+--
+-- Index pour la table `session_meta`
+--
+ALTER TABLE `session_meta`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `session_to_meta_FK` (`id_session`);
+
+--
+-- Index pour la table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `numero_telephone` (`numero_telephone`),
+  ADD KEY `kine_FK` (`id_kine`);
+
+--
+-- AUTO_INCREMENT pour les tables déchargées
+--
+
+--
+-- AUTO_INCREMENT pour la table `entrainement`
+--
+ALTER TABLE `entrainement`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT pour la table `kine`
+--
+ALTER TABLE `kine`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
+-- AUTO_INCREMENT pour la table `session`
+--
+ALTER TABLE `session`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT pour la table `session_meta`
+--
+ALTER TABLE `session_meta`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT pour la table `user`
+--
+ALTER TABLE `user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+
+--
+-- Contraintes pour les tables déchargées
+--
+
+--
+-- Contraintes pour la table `entrainement`
+--
+ALTER TABLE `entrainement`
+  ADD CONSTRAINT `session_FK` FOREIGN KEY (`id_kine`) REFERENCES `kine` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Contraintes pour la table `session`
+--
+ALTER TABLE `session`
+  ADD CONSTRAINT `entrainement_FK` FOREIGN KEY (`id_entrainement`) REFERENCES `entrainement` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `user_FK` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Contraintes pour la table `session_meta`
+--
+ALTER TABLE `session_meta`
+  ADD CONSTRAINT `session_to_meta_FK` FOREIGN KEY (`id_session`) REFERENCES `session` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Contraintes pour la table `user`
+--
+ALTER TABLE `user`
+  ADD CONSTRAINT `kine_FK` FOREIGN KEY (`id_kine`) REFERENCES `kine` (`id`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

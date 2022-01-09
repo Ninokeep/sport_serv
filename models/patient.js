@@ -5,7 +5,12 @@ const sequelize = require('../config/mysql');
 
 const User = sequelize.define('user', {
 
-
+    id:{ 
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER
+      },
 
     nom : {
         type: DataTypes.STRING,
