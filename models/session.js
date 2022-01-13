@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/mysql");
-
+const  Kine  = require('./kine');
 const Patient = require('./patient');
 const Session = sequelize.define(
   "session",
@@ -17,7 +17,8 @@ const Session = sequelize.define(
     },
     fini: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
+      
+      defaultValue: false
     },
     message_user: {
       type: DataTypes.STRING,
@@ -26,7 +27,20 @@ const Session = sequelize.define(
     repetition_fait: {
       type: DataTypes.NUMBER,
       allowNull: false,
+      defaultValue : 0
     },
+    id_kine : {
+      type: DataTypes.INTEGER,
+      references: {
+        model: Kine,
+        key: 'id'
+      }
+    },
+    commentaire_kine : {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
     id_user : {
       type: DataTypes.INTEGER,
       references: {

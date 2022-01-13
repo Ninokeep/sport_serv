@@ -74,7 +74,16 @@ body('niveau').trim().not().isNumeric().notEmpty().toLowerCase().withMessage('le
 body('commentaire').trim().not().isNumeric().notEmpty().toLowerCase().withMessage('le commentaire peut pas être vide'), authenticateToken,
 kineController.createEntrainement);
 
-router.post('/get-entrainement-user', kineController.getAllEntrainementByPatient)
+
+
+//j'affiche tous les entraînements des user d'un kiné
+router.post('/get-entrainement-user', authenticateToken, kineController.getAllEntrainementByPatient)
+//je donne une session  à un user, bien sécurisé !
+router.post('/give-entrainement-user',authenticateToken, kineController.GetEntrainementForPatient)
+
+router.delete('/give-entrainement-user',authenticateToken,kineController.deleteEntrainementForPatient);
+
+
 
 
 module.exports = router;

@@ -1,10 +1,10 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/mysql");
-
+const Session = require('./session');
 const SessionMeta = sequelize.define(
   "session_meta",
   {
-    meta_session: {
+    meta_name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -12,10 +12,13 @@ const SessionMeta = sequelize.define(
       type: DataTypes.NUMBER,
       allowNull: false,
     },
-    id_session: {
-      type: DataTypes.NUMBER,
-      allowNull: false,
-    }
+    id_session : {
+      type: DataTypes.INTEGER,
+      references: {
+        model: Session,
+        key: 'id'
+      }
+    },
   },
   {
     engine: "INNODB",
