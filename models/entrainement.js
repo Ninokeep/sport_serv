@@ -8,7 +8,10 @@ const Entrainement = sequelize.define('entrainement', {
         allowNull: false
     },
   
-
+    cote: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
  
     gif : {
         type  : DataTypes.STRING,
@@ -23,18 +26,8 @@ const Entrainement = sequelize.define('entrainement', {
         allowNull: false,
         
     },
-    commentaire : {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    id_kine : {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: Kine,
-            key: 'id'
-        }
-    }
+ 
+    
 
 },
 {

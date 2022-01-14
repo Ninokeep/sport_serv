@@ -47,11 +47,7 @@ const User = sequelize.define('user', {
       
         
     },
-    numero_telephone : {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      
-    },
+    
     pathologie : {
         type: DataTypes.STRING,
         allowNull: false

@@ -83,6 +83,8 @@ router.post('/give-entrainement-user',authenticateToken, kineController.GetEntra
 
 router.delete('/give-entrainement-user',authenticateToken,kineController.deleteEntrainementForPatient);
 
+router.get('/get-allentrainement', kineController.getAllEntrainement)
+
 
 
 

@@ -201,7 +201,7 @@ exports.registerPatient = async (req, res) => {
     const request_create_kine = await Patient.create(obj_request);
     res.status(201).json({ success: true, response: request_create_kine });
   } catch (e) {
-    res.status(400).json({ success: true, response: "user déjà existant" });
+    res.status(400).json({ success: true, response: e });
   }
 };
 
@@ -467,4 +467,12 @@ exports.deleteEntrainementForPatient = async(req,res)=>{
     else{
         res.status(200).json({success:false,response:"l'user n'appartient pas au kiné"})
     }
+}
+
+
+
+exports.getAllEntrainement  = async(req,res) => {
+
+  const request_entrainement = await Entrainement.findAll();
+  return res.status(200).json({success:true,response:request_entrainement})
 }
