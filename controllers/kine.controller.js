@@ -92,14 +92,14 @@ exports.login = async (req, res) => {
           .then(async (rep) => {
             if (rep) {
               const jwt = token.createToken(kineRequest[0].dataValues.id);
-              await Kine.update(
-                { token: jwt },
-                {
-                  where: {
-                    email: email,
-                  },
-                }
-              );
+              // await Kine.update(
+              //   { token: jwt },
+              //   {
+              //     where: {
+              //       email: email,
+              //     },
+              //   }
+              // );
               // j'insère le jwt dans l'objet de ma request sequelize
               kineRequest[0].dataValues.jwt = jwt;
               res.status(200).json({ success: true, response: kineRequest });

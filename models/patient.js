@@ -35,11 +35,7 @@ const User = sequelize.define('user', {
         allowNull: false
     },
 
-    rule : {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false
-    },
+   
     age : {
         type: DataTypes.INTEGER,
         allowNull: false,

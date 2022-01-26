@@ -14,24 +14,32 @@ function authenticateToken(req, res, next) {
         return res.status(401).json({"success":false,"response":"mauvais token"})
       }
       
-      else{
-        Kine.findOne({where: {
-          token : token
-        }}).then( rep => {
-          if(rep == null){
-            //mauvais format de token
-            return res.status(401).json({"success":false,"response":"mauvais format token"})
+      // else{
+      //   Kine.findOne({where: {
+      //     token : token
+      //   }}).then( rep => {
+      //     if(rep == null){
+      //       //mauvais format de token
+      //       return res.status(401).json({"success":false,"response":"mauvais format token"})
 
-          }
-          //création de session
+      //     }
+      //     //création de session
           
-          req.user = user.user;
+      //     req.user = user.user;
+          
+         
+      //     next();
+      //   },
+      //   err=>console.log("err"))
+      // }
+           
+          else{
+            console.log(user)
+            req.user = user.user;
           
          
           next();
-        },
-        err=>console.log("err"))
-      }
+          }
     });
 }
 
