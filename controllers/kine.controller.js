@@ -247,18 +247,18 @@ exports.updatePatient = async (req, res) => {
 //delete du patient
 exports.deletePatient = async (req, res) => {
   const id_kine = req.user;
-  const { email_patient } = req.body;
+  const { id } = req.params;
   const errors = validationResult(req);
-
+  console.log(id)
   //j'attrape l'erreur.
   if (!errors.isEmpty()) {
-    res.status(400).json({ success: false, response: errors });
+    res.status(200).json({ success: false, response: errors });
   }
 
   const request_patient = await Patient.findOne({
     where: {
       // chercher son émail au patient
-      email: email_patient,
+      id: id,
       // je regarde si l'id du kiné est le même que celui dans la table
       id_kine: id_kine,
     },
@@ -266,8 +266,8 @@ exports.deletePatient = async (req, res) => {
 
   if (request_patient === null) {
     res
-      .status(404)
-      .json({ success: false, response: "utilisateur pas trouvé" });
+      .status(200)
+      .json({ success: false, response: request_patient });
   }
   // je delete ici mon patient
 
@@ -448,22 +448,25 @@ exports.deleteEntrainementForPatient = async(req,res)=>{
     // ID KINE
     // NOM ENTRAINEMENT
     // REPETITION A FAIRE
-  
       //ici je dois vérifier si mon kiné est bien le kiné de l'user !
+      console.log(req.body)
       const request_user = await Patient.findAll({
           where: {
               id : id_user,
               id_kine : id_kine
           }
       })
+      
       if(request_user.length > 0){
-        const request_session = await Session.delete({
+        const request_session = await Session.destroy({
             where: {
                 id : id_session
             }
         })
-        
+        res.status(200).json({success:true, response: request_session})
+
     }
+   
     else{
         res.status(200).json({success:false,response:"l'user n'appartient pas au kiné"})
     }

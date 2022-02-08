@@ -63,7 +63,7 @@ router.get('/token', authenticateToken, kineController.testToken);
 
 
 // DELETE PATIENT
-router.delete('/delete-patient',body('email_patient').trim().notEmpty().isEmail().withMessage('le champ ne correspond pas à une adresse émail'), authenticateToken , kineController.deletePatient);
+router.delete('/delete-patient/:id',body('email_patient').trim().notEmpty().isEmail().withMessage('le champ ne correspond pas à une adresse émail'), authenticateToken , kineController.deletePatient);
 
 //all patient
 router.get('/get-patient', authenticateToken, kineController.allPatient);
@@ -80,10 +80,12 @@ kineController.createEntrainement);
 router.post('/get-entrainement-user', authenticateToken, kineController.getAllEntrainementByPatient)
 //je donne une session  à un user, bien sécurisé !
 router.post('/give-entrainement-user',authenticateToken, kineController.GetEntrainementForPatient)
-
-router.delete('/give-entrainement-user',authenticateToken,kineController.deleteEntrainementForPatient);
-
+//supprimer un entraînement pour un patient
+router.post('/delete-entrainement-user',authenticateToken,kineController.deleteEntrainementForPatient);
+// je renvois tous les entraînements
 router.get('/get-allentrainement', kineController.getAllEntrainement)
+
+
 
 
 
