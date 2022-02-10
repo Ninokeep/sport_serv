@@ -479,3 +479,43 @@ exports.getAllEntrainement  = async(req,res) => {
   const request_entrainement = await Entrainement.findAll();
   return res.status(200).json({success:true,response:request_entrainement})
 }
+
+
+//modification d'une session d'entraînement
+exports.updateEntrainementForUser = async(req,res) => {
+  const { commentaire_kine, id_user, repetition_fait, meta_value, fini, id_session } = req.body
+  const id_kine = req.user;
+  // connection.execute(
+  // 'UPDATE `SESSION`, `SESSION_META` INNER JOIN `SESSION_META` ON SESSION.id_user = USER.id SET SESSION_META.meta_value  = 100 WHERE USER.id = 47 AND SESSION.id = 25 ',
+  //   function (err, results, fields) {
+  //     console.log(err)
+  //     res.status(200).json({ success: true, response: results });
+
+  //     // if (results.length > 0) {
+  //     //   res.status(200).json({ success: true, response: results });
+  //     // } else {
+  //     //   res.status(200).json({ success: false, response: "pas trouvé" });
+  //     // }
+  //   }
+  // );
+
+  /**
+   * je prends les mêmes valeurs entre la table session et session_meta
+   */
+  connection.execute(
+    'UPDATE `session` INNER JOIN `session_meta` ON session.id = session_meta.id_session SET session_meta.meta_value  = ?, session.repetition_fait = ? , session.commentaire_kine = ?, session.fini = ? WHERE session.id_user = ? AND session.id = ? ', [meta_value,repetition_fait,commentaire_kine,fini, id_user, id_session],
+      function (err, results, fields) {
+          if(results){
+            if(results.affectedRows == 0){
+              res.status(200).json({sucess: true, response: "aucun résultats"})
+
+            }
+            else {
+            res.status(200).json({sucess: true, response: results})
+
+            }
+          }
+          
+      }
+    );
+}

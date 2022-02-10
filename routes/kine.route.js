@@ -85,7 +85,7 @@ router.post('/delete-entrainement-user',authenticateToken,kineController.deleteE
 // je renvois tous les entraînements
 router.get('/get-allentrainement', kineController.getAllEntrainement)
 
-
+router.put('/update-session-user', kineController.updateEntrainementForUser)
 
 
 
