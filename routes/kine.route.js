@@ -77,6 +77,7 @@ kineController.createEntrainement);
 
 
 //j'affiche tous les entraînements des user d'un kiné
+// je dois sécuriser les routes
 router.post('/get-entrainement-user', authenticateToken, kineController.getAllEntrainementByPatient)
 //je donne une session  à un user, bien sécurisé !
 router.post('/give-entrainement-user',authenticateToken, kineController.GetEntrainementForPatient)
@@ -85,7 +86,7 @@ router.post('/delete-entrainement-user',authenticateToken,kineController.deleteE
 // je renvois tous les entraînements
 router.get('/get-allentrainement', kineController.getAllEntrainement)
 
-router.put('/update-session-user', kineController.updateEntrainementForUser)
+router.put('/update-session-user', authenticateToken, kineController.updateEntrainementForUser)
 
 
 
